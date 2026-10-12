@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% from "components.html" import icon, post %}
+{% block title %}{{ profile_user['username'] | capitalize }}{% endblock %}
+{% block content %}
+  <div class="page-heading"><p class="eyebrow">COMMUNITY / PROFILE</p><h1>{{ profile_user['username'] | capitalize }}</h1><p class="page-description">@{{ profile_user['username'] }}</p></div>
+  <div class="content-grid">
+    <section class="feed-column" aria-label="Profile and posts">
+      <div class="profile-panel"><span class="avatar avatar-large" aria-hidden="true">{{ profile_user['username'][0] | upper }}</span><div class="profile-summary"><p class="eyebrow">ABOUT</p><!-- bio_html is pre-rendered in the view (V5 SSTI lives there). --><div class="profile-bio">{{ bio_html | safe }}</div></div>{% if user and user['username'] == profile_user['username'] %}<a class="button button-secondary" href="/settings">Edit profile {{ icon('edit') }}</a>{% endif %}</div>
+      <div class="feed-toolbar"><h2>Posts</h2><span>{{ tweets | length }} total</span></div>
+      <div class="post-list">{% for t in tweets %}{{ post(t) }}{% else %}<div class="empty-state"><h2>No posts yet.</h2><p>{% if user and user['username'] == profile_user['username'] %}<a class="text-link" href="/#compose">Write your first post {{ icon('arrow') }}</a>{% else %}Check back when {{ profile_user['username'] }} has something to share.{% endif %}</p></div>{% endfor %}</div>
+    </section>
+    <aside class="context-rail"><section class="rail-section"><p class="eyebrow">KEEP EXPLORING</p><h2>Community feed</h2><p>See the latest posts from everyone in the community.</p><a class="text-link" href="/">Back to the feed {{ icon('arrow') }}</a></section></aside>
+  </div>
+{% endblock %}

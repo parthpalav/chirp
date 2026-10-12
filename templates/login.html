@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from "components.html" import icon %}
+{% block title %}Sign in{% endblock %}
+{% block content %}
+  <div class="page-heading"><p class="eyebrow">ACCOUNT / SIGN IN</p><h1>Sign in</h1><p class="page-description">Your account, your posts, your profile.</p></div>
+  <div class="content-grid form-grid">
+    <form class="form-panel" method="post" action="/login">
+      <div class="panel-heading"><h2>Sign in to Chirp</h2><p>Enter your username and password.</p></div>
+      {% if error %}<div class="error-message" role="alert"><strong>Couldn’t sign you in.</strong><span>{{ error }}. Check your details and try again.</span></div>{% endif %}
+      <div class="field"><label for="username">Username</label><input id="username" name="username" autocomplete="username" placeholder="e.g. alice" {% if error %}aria-invalid="true"{% endif %}></div>
+      <div class="field"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" {% if error %}aria-invalid="true"{% endif %}></div>
+      <div class="form-actions"><a class="text-link" href="/">Back to the feed</a><button class="button" type="submit">Sign in {{ icon('arrow') }}</button></div>
+    </form>
+    <aside class="context-rail"><section class="rail-section"><p class="eyebrow">GETTING STARTED</p><h2>Try a demo account.</h2><p>Use one of these accounts to explore Chirp.</p><dl class="demo-accounts"><div><dt>alice</dt><dd>password123</dd></div><div><dt>bob</dt><dd>hunter2</dd></div><div><dt>admin</dt><dd>S3cr3t_@dm1n_2026</dd></div></dl></section><div class="rail-footer">You can read the feed without signing in.</div></aside>
+  </div>
+{% endblock %}

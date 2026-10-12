@@ -1,0 +1,49 @@
+{% from "components.html" import icon %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#161616">
+  <title>{% block title %}Feed{% endblock %} — Chirp</title>
+  <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+  <link rel="preload" href="{{ url_for('static', filename='fonts/IBMPlexSans-Regular.woff2') }}" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="shell-header">
+    <a class="brand" href="/" aria-label="Chirp home"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>chirp<span class="brand-period">.</span></a>
+    <span class="header-description">A small social space</span>
+    <div class="header-account">
+      {% if user %}
+        <a href="{{ url_for('profile', username=user['username']) }}">{{ icon('user') }}<span>@{{ user['username'] }}</span></a>
+        <a class="header-signout" href="/logout" aria-label="Sign out">{{ icon('logout') }}</a>
+      {% else %}
+        <a href="/login">Sign in {{ icon('arrow') }}</a>
+      {% endif %}
+    </div>
+  </header>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="nav-label">WORKSPACE</div>
+      <nav class="side-nav" aria-label="Main navigation">
+        <a href="/" {% if request.endpoint == 'index' %}aria-current="page"{% endif %}>{{ icon('home') }}<span>Feed</span></a>
+        {% if user %}
+          <a href="{{ url_for('profile', username=user['username']) }}" {% if request.endpoint == 'profile' and profile_user['username'] == user['username'] %}aria-current="page"{% endif %}>{{ icon('user') }}<span>My profile</span></a>
+          <a href="/settings" {% if request.endpoint == 'settings' %}aria-current="page"{% endif %}>{{ icon('settings') }}<span>Settings</span></a>
+          {% if user['username'] == 'admin' %}<a href="/admin" {% if request.endpoint == 'admin' %}aria-current="page"{% endif %}>{{ icon('users') }}<span>Administration</span></a>{% endif %}
+        {% else %}
+          <a href="/login" {% if request.endpoint == 'login' %}aria-current="page"{% endif %}>{{ icon('user') }}<span>Sign in</span></a>
+        {% endif %}
+      </nav>
+      <div class="sidebar-bottom">
+        {% if user %}<a class="sidebar-compose" href="/#compose">Write a post {{ icon('plus') }}</a>{% endif %}
+        
+        <div class="sidebar-footer"><span>Chirp</span><span>Local edition</span></div>
+      </div>
+    </aside>
+    <main id="main" class="main-content" tabindex="-1">{% block content %}{% endblock %}</main>
+  </div>
+</body>
+</html>

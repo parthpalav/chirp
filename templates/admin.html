@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Administration{% endblock %}
+{% block content %}
+  <div class="page-heading"><p class="eyebrow">WORKSPACE / ADMINISTRATION</p><h1>People</h1><p class="page-description">The accounts that make up the community.</p></div>
+  <section class="table-panel" aria-labelledby="users-heading"><div class="table-heading"><h2 id="users-heading">All users</h2><span class="muted">{{ users | length }} accounts</span></div><div class="table-scroll"><table><thead><tr><th scope="col">Username</th><th scope="col">Email address</th><th scope="col">Profile</th></tr></thead><tbody>{% for u in users %}<tr><td>@{{ u['username'] }}</td><td>{{ u['email'] }}</td><td><a class="text-link" href="{{ url_for('profile', username=u['username']) }}">View profile {{ icon('external') }}</a></td></tr>{% endfor %}</tbody></table></div></section>
+  <div class="admin-note"><span class="eyebrow">SESSION NOTE</span><code>FLAG{alg_none_made_you_admin}</code></div>
+{% endblock %}
