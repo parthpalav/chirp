@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% from "components.html" import icon %}
+{% block title %}{{ error_title }}{% endblock %}
+{% block content %}
+  <div class="page-heading">
+    <p class="eyebrow">REQUEST / {{ status_code }}</p>
+    <h1>{{ error_title }}</h1>
+    <p class="page-description">{{ error_description }}</p>
+  </div>
+  <div class="error-actions">
+    <a class="button" href="/">Back to the feed {{ icon('arrow') }}</a>
+    {% if not user %}<a class="text-link" href="/login">Sign in {{ icon('arrow') }}</a>{% endif %}
+  </div>
+{% endblock %}

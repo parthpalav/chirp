@@ -8,6 +8,7 @@
   {% elif name == 'logout' %}<path d="M10 3H4v18h6M10 12h11M16 7l5 5-5 5"/>
   {% elif name == 'plus' %}<path d="M12 4v16M4 12h16"/>
   {% elif name == 'external' %}<path d="M5 19 19 5M5 5h14v14"/>
+  {% elif name == 'check' %}<path d="m4 12 5 5L20 6"/>
   {% elif name == 'edit' %}<path d="m16 3 5 5-12 12-6 1 1-6ZM13 6l5 5"/>
   {% endif %}
 </svg>
@@ -21,8 +22,8 @@
       <a class="post-author" href="{{ url_for('profile', username=tweet['username']) }}">{{ tweet['username'] | capitalize }}<span class="handle">@{{ tweet['username'] }}</span></a>
       <time datetime="{{ tweet['created'] | replace(' ', 'T') }}Z">{{ tweet['created'][:16] }}</time>
     </div>
-    <!-- V2 — STORED XSS: tweet body intentionally rendered without escaping. -->
-    <div class="post-body">{{ tweet['body'] | safe }}</div>
+    <div class="post-body">{% if config.get('CHIRP_FIXED') %}{{ tweet['body'] }}{% else %}{{ tweet['body'] | safe }}{% endif %}</div>
+    {# V2: only the training app disables escaping. Both feed and profiles share this component. #}
     <a class="post-permalink" href="{{ url_for('index') }}#post-{{ tweet['id'] }}" aria-label="Link to post {{ tweet['id'] }}">{{ '%03d' | format(tweet['id']) }}<span aria-hidden="true"> / </span>Post</a>
   </div>
 </article>

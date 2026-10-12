@@ -3,16 +3,17 @@
 {% block content %}
   <div class="page-heading">
     <p class="eyebrow">COMMUNITY / TIMELINE</p>
-    <div class="heading-line"><h1>Feed</h1><span class="heading-count">{{ tweets | length }} posts</span></div>
+    <div class="heading-line"><h1>Feed</h1><span class="heading-count">{{ tweets | length }} {{ 'post' if tweets | length == 1 else 'posts' }}</span></div>
     <p class="page-description">The latest posts from the community.</p>
   </div>
   <div class="content-grid">
     <section class="feed-column" aria-label="Community feed">
       {% if user %}
-        <form class="composer" id="compose" method="post" action="/tweet">
+        <form class="composer" id="compose" method="post" action="/tweet" data-pending="Posting…" data-shortcut>
+          {% if config.get('CHIRP_FIXED') %}<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{% endif %}
           <div class="composer-label"><label for="post-body">What’s on your mind?</label><span class="handle">@{{ user['username'] }}</span></div>
           <textarea id="post-body" name="body" rows="3" placeholder="Write a thought, an update, a question…"></textarea>
-          <div class="composer-footer"><span>Posting to the community</span><button type="submit" class="button">Post {{ icon('arrow') }}</button></div>
+          <div class="composer-footer"><span>Ctrl / Cmd + Enter to post</span><button type="submit" class="button">Post {{ icon('arrow') }}</button></div>
         </form>
       {% else %}
         <div class="join-panel" id="compose"><div><h2>Have something to share?</h2><p>Sign in to add your voice to the feed.</p></div><a class="button" href="/login">Sign in to post {{ icon('arrow') }}</a></div>
@@ -25,7 +26,7 @@
     </section>
     <aside class="context-rail" aria-label="About the community">
       <section class="rail-section"><p class="eyebrow">THE PEOPLE</p><h2>Community</h2><div class="member-list">{% for member in members %}<a class="member" href="{{ url_for('profile', username=member['username']) }}"><span class="avatar avatar-small">{{ member['username'][0] | upper }}</span><span><strong>{{ member['username'] | capitalize }}</strong><span class="handle">@{{ member['username'] }}</span></span>{{ icon('external') }}</a>{% else %}<p class="muted">No members yet.</p>{% endfor %}</div></section>
-      <section class="rail-section about-section"><p class="eyebrow">ABOUT CHIRP</p><h2>A shared timeline.</h2><p>Post an update or see what others are thinking. Everyone’s posts appear here, newest first.</p><a class="text-link" href="{% if user %}{{ url_for('profile', username=user['username']) }}{% else %}/login{% endif %}">{% if user %}Your profile{% else %}Join the conversation{% endif %} {{ icon('arrow') }}</a></section>
+      <section class="rail-section about-section"><p class="eyebrow">ABOUT CHIRP</p><img class="timeline-graphic" src="{{ url_for('static', filename='timeline.svg') }}" alt="" width="272" height="136"><h2>A shared timeline.</h2><p>Post an update or see what others are thinking. Everyone’s posts appear here, newest first.</p><a class="text-link" href="{% if user %}{{ url_for('profile', username=user['username']) }}{% else %}/login{% endif %}">{% if user %}Your profile{% else %}Join the conversation{% endif %} {{ icon('arrow') }}</a></section>
       <div class="rail-footer">Select a person to view their bio and posts.</div>
     </aside>
   </div>

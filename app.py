@@ -30,6 +30,7 @@ from flask import (
     request,
     make_response,
     abort,
+    url_for,
 )
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -136,7 +137,7 @@ def index():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        return render_template("login.html", error=None)
+        return render_template("login.html", error=None, user=current_user())
 
     username = request.form.get("username", "")
     password = request.form.get("password", "")
@@ -154,15 +155,15 @@ def login():
         row = None
 
     if row:
-        resp = make_response(redirect("/"))
+        resp = make_response(redirect(url_for("index", notice="signed-in")))
         resp.set_cookie("session", make_token(row["username"]))
         return resp
-    return render_template("login.html", error="Invalid credentials")
+    return render_template("login.html", error="Invalid credentials", user=current_user())
 
 
 @app.route("/logout")
 def logout():
-    resp = make_response(redirect("/"))
+    resp = make_response(redirect(url_for("index", notice="signed-out")))
     resp.delete_cookie("session")
     return resp
 
@@ -175,11 +176,11 @@ def tweet():
     body = request.form.get("body", "")
     db = get_db()
     # Body is parameterized here (no SQLi) but is rendered unsafely later (V2).
-    db.execute(
+    cursor = db.execute(
         "INSERT INTO tweets (user_id, body) VALUES (?, ?)", (user["id"], body)
     )
     db.commit()
-    return redirect("/")
+    return redirect(url_for("index", notice="posted", _anchor=f"post-{cursor.lastrowid}"))
 
 
 @app.route("/user/<username>")
@@ -222,7 +223,7 @@ def settings():
         bio = request.form.get("bio", "")
         db.execute("UPDATE users SET bio = ? WHERE id = ?", (bio, user["id"]))
         db.commit()
-        return redirect("/user/" + user["username"])
+        return redirect(url_for("profile", username=user["username"], notice="saved"))
     return render_template("settings.html", user=user)
 
 
@@ -255,6 +256,19 @@ def admin():
     db = get_db()
     users = db.execute("SELECT username, email FROM users").fetchall()
     return render_template("admin.html", users=users, user=user)
+
+
+def error_page(error):
+    if request.path.startswith("/api/"):
+        return {"error": error.name, "status": error.code}, error.code
+    return render_template(
+        "error.html", status_code=error.code, error_title=error.name,
+        error_description=error.description, user=current_user(),
+    ), error.code
+
+
+for status in (400, 401, 403, 404, 405):
+    app.register_error_handler(status, error_page)
 
 
 if __name__ == "__main__":
