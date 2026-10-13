@@ -24,11 +24,15 @@
   <path d="m4 12 5 5L20 6" />
   {% elif name == 'edit' %}
   <path d="m16 3 5 5-12 12-6 1 1-6ZM13 6l5 5" />
+  {% elif name == 'trash' %}
+  <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+  <line x1="10" y1="11" x2="10" y2="17" />
+  <line x1="14" y1="11" x2="14" y2="17" />
   {% endif %}
 </svg>
 {%- endmacro %}
 
-{% macro post(tweet) -%}
+{% macro post(tweet, current_user=None) -%}
 <article class="post" id="post-{{ tweet['id'] }}">
   <a class="avatar" href="{{ url_for('profile', username=tweet['username']) }}"
     aria-label="View {{ tweet['username'] }}'s profile">{{ tweet['username'][0] | upper }}</a>
@@ -41,9 +45,19 @@
     <div class="post-body">{% if config.get('CHIRP_FIXED') %}{{ tweet['body'] }}{% else %}{{ tweet['body'] | safe }}{%
       endif %}</div>
     {# V2: only the training app disables escaping. Both feed and profiles share this component. #}
-    <a class="post-permalink" href="{{ url_for('index') }}#post-{{ tweet['id'] }}"
-      aria-label="Link to post {{ tweet['id'] }}">{{ '%03d' | format(tweet['id']) }}<span aria-hidden="true"> /
-      </span>Post</a>
+    <div class="post-footer">
+      <a class="post-permalink" href="{{ url_for('index') }}#post-{{ tweet['id'] }}"
+        aria-label="Link to post {{ tweet['id'] }}">{{ '%03d' | format(tweet['id']) }}<span aria-hidden="true"> /
+        </span>Post</a>
+      {% if current_user and (current_user['username'] == tweet['username'] or current_user['username'] == 'admin') %}
+      <form class="post-delete-form" method="post" action="{{ url_for('delete_tweet', tweet_id=tweet['id']) }}" onsubmit="return confirm('Delete this post?');">
+        {% if config.get('CHIRP_FIXED') %}<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">{% endif %}
+        <button type="submit" class="post-delete-btn" aria-label="Delete post {{ tweet['id'] }}" title="Delete this post">
+          {{ icon('trash') }}<span>Delete</span>
+        </button>
+      </form>
+      {% endif %}
+    </div>
   </div>
 </article>
 {%- endmacro %}

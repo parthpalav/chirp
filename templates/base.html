@@ -51,7 +51,7 @@
       </div>
     </aside>
     <main id="main" class="main-content" tabindex="-1">
-      {% set notices = {'posted': 'Your post is now on the feed.', 'saved': 'Your profile has been updated.', 'signed-in': 'You’re signed in. Welcome back.', 'signed-out': 'You’ve signed out.'} %}
+      {% set notices = {'posted': 'Your post is now on the feed.', 'deleted': 'The post has been deleted.', 'saved': 'Your profile has been updated.', 'signed-in': 'You’re signed in. Welcome back.', 'signed-out': 'You’ve signed out.'} %}
       {% if request.args.get('notice') in notices %}<div class="notice" role="status">{{ icon('check') }}<span>{{ notices[request.args.get('notice')] }}</span></div>{% endif %}
       {% block content %}{% endblock %}
     </main>

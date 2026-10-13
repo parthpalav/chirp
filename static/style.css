@@ -133,9 +133,13 @@ a.avatar:hover { color: var(--link); background: #e0e0e0; }
 .post-author:hover { color: var(--link); }
 .post-meta time { font: 12px/1.6 var(--mono); color: var(--secondary); white-space: nowrap; }
 .post-body { margin-top: 12px; line-height: 1.55; overflow-wrap: anywhere; white-space: pre-wrap; }
-.post-body img, .profile-bio img { max-width: 100%; }
-.post-permalink { display: inline-block; color: var(--secondary); font: 11px/1.6 var(--mono); margin-top: 20px; }
+.post-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 16px; }
+.post-permalink { display: inline-block; color: var(--secondary); font: 11px/1.6 var(--mono); }
 .post-permalink:hover { color: var(--link); text-decoration: underline; }
+.post-delete-form { margin: 0; }
+.post-delete-btn { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border: 1px solid transparent; background: transparent; color: var(--secondary); font: 11px/1.4 var(--mono); cursor: pointer; border-radius: 0; }
+.post-delete-btn .icon { width: 14px; height: 14px; }
+.post-delete-btn:hover { color: #da1e28; background: #fff1f1; border-color: #ffd7d9; }
 .feed-end { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 32px 0; font-size: 12px; color: var(--secondary); }
 .end-mark { width: 16px; height: 1px; background: #8d8d8d; }
 .empty-state { padding: 40px 24px; }

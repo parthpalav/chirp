@@ -20,7 +20,7 @@
       {% endif %}
       <div class="feed-toolbar"><h2>All posts</h2><span>Newest first {{ icon('arrow') }}</span></div>
       <div class="post-list">
-        {% for t in tweets %}{{ post(t) }}{% else %}<div class="empty-state"><h2>The conversation starts here.</h2><p>No posts yet. Share the first thought.</p></div>{% endfor %}
+        {% for t in tweets %}{{ post(t, user) }}{% else %}<div class="empty-state"><h2>The conversation starts here.</h2><p>No posts yet. Share the first thought.</p></div>{% endfor %}
       </div>
       <div class="feed-end"><span class="end-mark" aria-hidden="true"></span>You’re all caught up.</div>
     </section>

@@ -136,6 +136,26 @@ def tweet():
     return redirect(url_for("index", notice="posted", _anchor=f"post-{cursor.lastrowid}"))
 
 
+@app.route("/tweet/<int:tweet_id>/delete", methods=["POST"])
+def delete_tweet(tweet_id):
+    user = current_user()
+    if not user:
+        return redirect(url_for("login"))
+    db = get_db()
+    if user["username"] == "admin":
+        db.execute("DELETE FROM tweets WHERE id = ?", (tweet_id,))
+    else:
+        db.execute(
+            "DELETE FROM tweets WHERE id = ? AND user_id = ?",
+            (tweet_id, user["id"]),
+        )
+    db.commit()
+    referrer = request.referrer
+    if referrer and request.host in referrer:
+        return redirect(referrer)
+    return redirect(url_for("index", notice="deleted"))
+
+
 @app.route("/user/<username>")
 def profile(username):
     db = get_db()
