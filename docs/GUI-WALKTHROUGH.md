@@ -1,15 +1,9 @@
-# Chirp — GUI Walkthrough: Exploit and Fix (browser only, no curl)
+# Chirp — GUI Walkthrough: Exploit and Fix 
 
 All five vulnerabilities can be exploited in a browser with no command line:
 **V1, V2 and V5** are pure point-and-click, **V3** uses the address bar (there is
 no DM page in the UI), and **V4** uses the browser's Developer Tools to set a
 cookie. **Part 2** then applies the fix and re-checks each one in the browser.
-
-Every step below was executed in a real browser against the running app.
-
-> ⚠️ Localhost, offline, training only. The vulnerable app's header shows
-> **"Training edition"**; the hardened app shows **"Fixed edition"** — use that
-> to be sure which one you are looking at.
 
 **Prerequisites:** finish Part 1–7 of [RUNBOOK.md](RUNBOOK.md) first — clone,
 virtualenv, install, seed, and `python app.py` running at

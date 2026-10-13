@@ -1,30 +1,49 @@
 {% macro icon(name) -%}
-<svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true" focusable="false">
-  {% if name == 'arrow' %}<path d="M4 12h15M13 6l6 6-6 6"/>
-  {% elif name == 'home' %}<path d="m3 10 9-7 9 7M5 9v12h5v-7h4v7h5V9"/>
-  {% elif name == 'user' %}<circle cx="12" cy="7" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/>
-  {% elif name == 'users' %}<circle cx="9" cy="7" r="3"/><path d="M2 21v-3a7 7 0 0 1 14 0v3M16 4a3 3 0 0 1 0 6M19 14a6 6 0 0 1 3 5v2"/>
-  {% elif name == 'settings' %}<path d="M3 6h18M3 12h18M3 18h18"/><path d="M7 3v6M16 9v6M9 15v6"/>
-  {% elif name == 'logout' %}<path d="M10 3H4v18h6M10 12h11M16 7l5 5-5 5"/>
-  {% elif name == 'plus' %}<path d="M12 4v16M4 12h16"/>
-  {% elif name == 'external' %}<path d="M5 19 19 5M5 5h14v14"/>
-  {% elif name == 'check' %}<path d="m4 12 5 5L20 6"/>
-  {% elif name == 'edit' %}<path d="m16 3 5 5-12 12-6 1 1-6ZM13 6l5 5"/>
+<svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+  stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true" focusable="false">
+  {% if name == 'arrow' %}
+  <path d="M4 12h15M13 6l6 6-6 6" />
+  {% elif name == 'home' %}
+  <path d="m3 10 9-7 9 7M5 9v12h5v-7h4v7h5V9" />
+  {% elif name == 'user' %}
+  <circle cx="12" cy="7" r="4" />
+  <path d="M4 21v-2a8 8 0 0 1 16 0v2" />
+  {% elif name == 'users' %}
+  <circle cx="9" cy="7" r="3" />
+  <path d="M2 21v-3a7 7 0 0 1 14 0v3M16 4a3 3 0 0 1 0 6M19 14a6 6 0 0 1 3 5v2" />
+  {% elif name == 'settings' %}
+  <path d="M3 6h18M3 12h18M3 18h18" />
+  <path d="M7 3v6M16 9v6M9 15v6" />
+  {% elif name == 'logout' %}
+  <path d="M10 3H4v18h6M10 12h11M16 7l5 5-5 5" />
+  {% elif name == 'plus' %}
+  <path d="M12 4v16M4 12h16" />
+  {% elif name == 'external' %}
+  <path d="M5 19 19 5M5 5h14v14" />
+  {% elif name == 'check' %}
+  <path d="m4 12 5 5L20 6" />
+  {% elif name == 'edit' %}
+  <path d="m16 3 5 5-12 12-6 1 1-6ZM13 6l5 5" />
   {% endif %}
 </svg>
 {%- endmacro %}
 
 {% macro post(tweet) -%}
 <article class="post" id="post-{{ tweet['id'] }}">
-  <a class="avatar" href="{{ url_for('profile', username=tweet['username']) }}" aria-label="View {{ tweet['username'] }}'s profile">{{ tweet['username'][0] | upper }}</a>
+  <a class="avatar" href="{{ url_for('profile', username=tweet['username']) }}"
+    aria-label="View {{ tweet['username'] }}'s profile">{{ tweet['username'][0] | upper }}</a>
   <div class="post-content">
     <div class="post-meta">
-      <a class="post-author" href="{{ url_for('profile', username=tweet['username']) }}">{{ tweet['username'] | capitalize }}<span class="handle">@{{ tweet['username'] }}</span></a>
+      <a class="post-author" href="{{ url_for('profile', username=tweet['username']) }}">{{ tweet['username'] |
+        capitalize }}<span class="handle">@{{ tweet['username'] }}</span></a>
       <time datetime="{{ tweet['created'] | replace(' ', 'T') }}Z">{{ tweet['created'][:16] }}</time>
     </div>
-    <div class="post-body">{% if config.get('CHIRP_FIXED') %}{{ tweet['body'] }}{% else %}{{ tweet['body'] | safe }}{% endif %}</div>
+    <div class="post-body">{% if config.get('CHIRP_FIXED') %}{{ tweet['body'] }}{% else %}{{ tweet['body'] | safe }}{%
+      endif %}</div>
     {# V2: only the training app disables escaping. Both feed and profiles share this component. #}
-    <a class="post-permalink" href="{{ url_for('index') }}#post-{{ tweet['id'] }}" aria-label="Link to post {{ tweet['id'] }}">{{ '%03d' | format(tweet['id']) }}<span aria-hidden="true"> / </span>Post</a>
+    <a class="post-permalink" href="{{ url_for('index') }}#post-{{ tweet['id'] }}"
+      aria-label="Link to post {{ tweet['id'] }}">{{ '%03d' | format(tweet['id']) }}<span aria-hidden="true"> /
+      </span>Post</a>
   </div>
 </article>
 {%- endmacro %}
